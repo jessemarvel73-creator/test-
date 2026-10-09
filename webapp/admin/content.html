@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YOUR SHOP • Content Editor</title>
+<style>
+:root{color-scheme:dark;--bg:#0f172a;--panel:#172033;--line:#2a3852;--text:#eef2ff;--muted:#9aa8bf;--accent:#6ea8fe;--danger:#ff7b7b;--ok:#69d39b}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#0b1120,#111827);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}.wrap{max-width:1050px;margin:0 auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}.title h1{margin:0 0 5px;font-size:26px}.title p{margin:0;color:var(--muted)}.actions{display:flex;gap:10px}.btn{border:1px solid var(--line);background:#202c43;color:var(--text);padding:11px 16px;border-radius:11px;font-weight:700;cursor:pointer}.btn.primary{background:#315fa8;border-color:#4778c6}.btn:disabled{opacity:.6;cursor:wait}.card{background:rgba(23,32,51,.92);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}.card h2{margin:0 0 5px}.hint{color:var(--muted);margin:0 0 18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-weight:700}.field small{color:var(--muted)}input,textarea{width:100%;border:1px solid var(--line);background:#0e1627;color:var(--text);border-radius:10px;padding:11px 12px;font:inherit;outline:none}input:focus,textarea:focus{border-color:var(--accent)}textarea{min-height:110px;resize:vertical}.status{min-height:22px;color:var(--muted)}.status.ok{color:var(--ok)}.status.err{color:var(--danger)}.note{padding:12px;border-radius:10px;background:#101a2d;color:var(--muted);font-size:13px;line-height:1.5}@media(max-width:700px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="title"><h1>✏️ Content Editor</h1><p>Control the text and welcome screen used by YOUR SHOP.</p></div>
+    <div class="actions"><button class="btn" onclick="location.href='/admin/panel'">← Admin Panel</button><button id="saveBtn" class="btn primary">Save Changes</button></div>
+  </div>
+  <div id="status" class="status">Loading content…</div>
+
+  <section class="card">
+    <h2>👋 Welcome / Start</h2><p class="hint">These values are used when a customer sends <code>/start</code>.</p>
+    <div class="grid">
+      <div class="field full"><label for="welcome_title">Welcome Title</label><input id="welcome_title" placeholder="🛍️ Welcome to YOUR SHOP!"></div>
+      <div class="field full"><label for="welcome_description">Welcome Description</label><textarea id="welcome_description" placeholder="Your professional gaming store."></textarea></div>
+      <div class="field full"><label for="welcome_image">Welcome Image</label><input id="welcome_image" placeholder="https://example.com/welcome.jpg or tg:FILE_ID"><small>Use a direct HTTPS image URL or a Telegram file ID prefixed with <code>tg:</code>.</small></div>
+      <div class="field"><label for="welcome_button_1">Button 1 • Products Here</label><input id="welcome_button_1" placeholder="🛍️ See Products Here"></div>
+      <div class="field"><label for="welcome_button_2">Button 2 • Shop Mini App</label><input id="welcome_button_2" placeholder="📱 See Products in Shop"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📚 Customer Sections</h2><p class="hint">Descriptions used by customer-facing feature screens.</p>
+    <div class="grid">
+      <div class="field"><label for="help_title">Help Title</label><input id="help_title"></div>
+      <div class="field"><label for="paid_review_price_stars">Paid Review Price (Stars)</label><input id="paid_review_price_stars" type="number" min="0"></div>
+      <div class="field full"><label for="help_description">Help Description</label><textarea id="help_description"></textarea></div>
+      <div class="field full"><label for="shop_description">Shop Description</label><textarea id="shop_description"></textarea></div>
+      <div class="field full"><label for="support_description">Support Description</label><textarea id="support_description"></textarea></div>
+      <div class="field full"><label for="rewards_description">Rewards Description</label><textarea id="rewards_description"></textarea></div>
+      <div class="field full"><label for="promo_description">Promo Description</label><textarea id="promo_description"></textarea></div>
+      <div class="field full"><label for="orders_description">Orders Description</label><textarea id="orders_description"></textarea></div>
+      <div class="field full"><label for="notifications_description">Notifications Description</label><textarea id="notifications_description"></textarea></div>
+      <div class="field full"><label for="giveaways_description">Giveaways Description</label><textarea id="giveaways_description"></textarea></div>
+      <div class="field full"><label for="referral_description">Referral Description</label><textarea id="referral_description"></textarea></div>
+      <div class="field full"><label for="feedback_description">Feedback Description</label><textarea id="feedback_description"></textarea></div>
+      <div class="field full"><label for="contact_admin_description">Contact Admin Description</label><textarea id="contact_admin_description"></textarea></div>
+      <div class="field full"><label for="promo_purchase_description">Promo Purchase Description</label><textarea id="promo_purchase_description"></textarea></div>
+    </div>
+  </section>
+
+  <section class="card"><div class="note">Changes are saved to the same <code>settings</code> table used by the bot. The page also reloads the saved values after every successful save, so a refresh will not mysteriously erase them. Humanity has suffered enough from settings pages that lie.</div></section>
+</div>
+<script>
+const keys=["welcome_title","welcome_description","welcome_image","welcome_button_1","welcome_button_2","help_title","help_description","shop_description","support_description","rewards_description","promo_description","orders_description","notifications_description","giveaways_description","referral_description","feedback_description","contact_admin_description","promo_purchase_description","paid_review_price_stars"];
+const $=id=>document.getElementById(id);
+function setStatus(text,type=""){const x=$("status");x.textContent=text;x.className="status "+type}
+function fill(settings){for(const key of keys){const el=$(key);if(el)el.value=settings?.[key]??""}}
+async function load(){try{const r=await fetch("/api/admin/content",{credentials:"include",cache:"no-store"});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||`Request failed (${r.status})`);fill(d.settings||d.content||{});setStatus("Content loaded.","ok")}catch(e){setStatus(e.message||"Unable to load content.","err")}}
+async function save(){const btn=$("saveBtn");btn.disabled=true;btn.textContent="Saving…";try{const settings={};for(const key of keys)settings[key]=$(key).value;const r=await fetch("/api/admin/content",{method:"PUT",credentials:"include",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(settings)});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||`Request failed (${r.status})`);fill(d.content||settings);setStatus(`✅ Saved ${Number(d.updated_count||Object.keys(settings).length)} content fields successfully.`,"ok")}catch(e){setStatus(e.message||"Unable to save content.","err")}finally{btn.disabled=false;btn.textContent="Save Changes"}}
+$("saveBtn").addEventListener("click",save);load();
+</script>
+</body>
+</html>

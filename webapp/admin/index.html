@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YOUR SHOP Admin Panel</title>
+<link rel="stylesheet" href="/static/admin/admin.css?v=3">
+<style>
+.product-details{display:flex;flex-direction:column;gap:18px}.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.detail-grid>div,.dependency-grid span{padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.02)}.detail-grid span,.detail-section>.muted{display:block;margin-bottom:5px}.detail-grid strong{display:block}.detail-section{padding-top:4px}.detail-section p{white-space:pre-wrap;overflow-wrap:anywhere}.product-detail-images{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:8px}.product-detail-images a{display:block}.product-detail-images img{display:block;width:100%;aspect-ratio:1;border-radius:12px;object-fit:cover;background:#111}.dependency-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.table-wrap small.muted{display:block;font-size:11px;margin-top:3px}@media(max-width:700px){.detail-grid{grid-template-columns:1fr}}.product-inventory-step{margin-top:18px;padding:18px;border:1px solid rgba(70,229,157,.2);border-radius:18px;background:linear-gradient(145deg,rgba(32,214,111,.07),rgba(255,255,255,.02));}.product-inventory-step[hidden]{display:none!important}.product-inventory-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}.product-inventory-icon{width:46px;height:46px;flex:0 0 46px;border-radius:14px;display:grid;place-items:center;background:rgba(34,197,94,.12);color:#86efac;font-size:22px}.product-inventory-head h3{margin:0 0 4px}.product-inventory-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}.product-inventory-product{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 13px;margin-bottom:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.02)}.product-inventory-product strong{display:block}.product-inventory-product span{color:#86efac;font-size:12px;font-weight:800}.product-inventory-textarea{min-height:150px;resize:vertical}.product-inventory-foot{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px}.product-inventory-status{color:var(--muted);font-size:12px}.product-inventory-status strong{color:#86efac}.product-inventory-actions{display:flex;gap:8px;flex-wrap:wrap}.product-inventory-actions .btn{min-width:120px}.product-inventory-warning{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);color:#fcd34d;font-size:11px;line-height:1.45}@media(max-width:700px){.product-inventory-head{align-items:center}.product-inventory-actions{width:100%}.product-inventory-actions .btn{flex:1}.product-inventory-product{align-items:flex-start;flex-direction:column}}
+</style>
+<style>
+.test-order-card{max-width:720px;display:grid;gap:14px;padding:18px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.02)}
+.test-order-card label,.referral-settings-grid label{display:flex;flex-direction:column;gap:7px;font-weight:700}
+.test-order-card input,.test-order-card select,.referral-settings-grid input{width:100%;box-sizing:border-box}
+.referral-settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.settings-preview{display:flex;flex-direction:column;gap:5px;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(34,197,94,.06);margin-bottom:14px}
+.settings-preview span{color:var(--muted);font-size:12px}
+@media(max-width:700px){.referral-settings-grid{grid-template-columns:1fr}}
+</style></head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="brand-mark small">CPM</span><div><strong>YOUR SHOP</strong><small>Admin Panel</small></div></div>
+    <nav id="nav">
+      <button data-section="dashboard" class="nav-btn active">📊 Dashboard</button>
+      <button data-section="games" class="nav-btn">🎮 Games</button>
+      <button data-section="categories" class="nav-btn">🗂 Categories</button>
+      <button data-section="products" class="nav-btn">📦 Products</button>
+      <button data-section="inventory" class="nav-btn">🧰 Inventory</button>
+      <button data-section="analytics" class="nav-btn">📈 Analytics</button>
+      <button data-section="orders" class="nav-btn">🛒 Orders</button>
+      <button data-section="test-order" class="nav-btn">🧪 Test Store</button>
+      <button data-section="referral" class="nav-btn">🎁 Referral Settings</button>
+      <button data-section="payments" class="nav-btn">💳 Payments</button>
+      <button data-section="users" class="nav-btn">👥 Users</button>
+      <button type="button" class="nav-btn" onclick="window.location.href='/admin/tickets'">🎫 Tickets</button>
+      <button type="button" class="nav-btn" onclick="window.location.href='/admin/promos'">🏷️ Promo Codes</button>
+      <button type="button" class="nav-btn" onclick="window.location.href='/admin/notes'">📝 Admin Notes</button>
+      <button type="button" class="nav-btn" onclick="window.location.href='/admin/content'">📝 Content Editor</button>
+      <button type="button" class="nav-btn" onclick="window.location.href='/admin/feedback'">⭐ Feedback</button>
+    </nav>
+    <button id="logoutBtn" class="nav-btn logout">↪ Logout</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle" class="muted">Store overview</p></div><div id="statusBadge" class="status">Checking session…</div></header>
+    <div id="globalMessage" class="global-message"></div>
+
+    <section id="section-dashboard" class="section active">
+      <div class="panel" id="storeStatusCard"><div class="panel-head"><h2>⚙️ Store Status</h2><div class="store-status-actions"><button id="storeStatusOnline" class="btn success" type="button">🟢 Store Online</button><button id="storeStatusOffline" class="btn danger" type="button">🔴 Store Offline</button></div></div><p id="storeStatusText" class="muted">Checking store status…</p></div>
+      <div class="stats-grid">
+        <div class="stat-card"><span>Products</span><strong id="statProducts">–</strong></div>
+        <div class="stat-card"><span>Games</span><strong id="statGames">–</strong></div>
+        <div class="stat-card"><span>Categories</span><strong id="statCategories">–</strong></div>
+        <div class="stat-card"><span>Users</span><strong id="statUsers">–</strong></div>
+        <div class="stat-card"><span>Orders</span><strong id="statOrders">–</strong></div>
+        <div class="stat-card"><span>Revenue</span><strong id="statRevenue">–</strong><small>⭐ Stars</small></div>
+      </div>
+      <div class="panel-grid">
+        <div class="panel"><div class="panel-head"><h2>Recent Orders</h2><button class="btn ghost" onclick="loadOrders()">Refresh</button></div><div id="recentOrders" class="table-wrap"><div class="empty">Loading…</div></div></div>
+        <div class="panel"><div class="panel-head"><h2>Low Stock</h2><button class="btn ghost" onclick="loadProducts()">Refresh</button></div><div id="lowStock" class="list"></div></div>
+      </div>
+    </section>
+
+    <section id="section-analytics" class="section">
+      <div class="panel">
+        <div class="panel-head"><div><h2>📈 Sales Analytics</h2><p class="muted">Operational sales and product performance summary.</p></div><div class="toolbar"><select id="analyticsDays"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last year</option></select><button class="btn ghost" type="button" onclick="loadAnalytics()">Refresh</button></div></div>
+        <div class="stats-grid"><div class="stat-card"><span>Orders</span><strong id="analyticsOrders">–</strong></div><div class="stat-card"><span>Paid Orders</span><strong id="analyticsPaidOrders">–</strong></div><div class="stat-card"><span>Revenue</span><strong id="analyticsRevenue">–</strong><small>⭐ Stars</small></div></div>
+        <h3>Top Products</h3><div id="analyticsTopProducts" class="table-wrap"><div class="empty">Loading…</div></div>
+        <h3>Daily Summary</h3><div id="analyticsDaily" class="table-wrap"><div class="empty">Loading…</div></div>
+      </div>
+      <div class="panel"><div class="panel-head"><div><h2>Inventory Export</h2><p class="muted">Exports metadata only; item payloads are never included.</p></div><div class="toolbar"><button class="btn ghost" type="button" onclick="exportInventory('available')">Available CSV</button><button class="btn ghost" type="button" onclick="exportInventory('all')">All CSV</button></div></div></div>
+    </section>
+
+    <section id="section-games" class="section">
+      <div class="panel"><div class="panel-head"><h2>Games</h2><button class="btn primary" onclick="openModal('gameModal')">+ Add Game</button></div><div id="gamesTable" class="table-wrap"></div></div>
+    </section>
+
+    <section id="section-categories" class="section">
+      <div class="panel"><div class="panel-head"><h2>Categories</h2><button class="btn primary" onclick="openCategoryModal()">+ Add Category</button></div><div class="toolbar"><select id="categoryGameFilter" onchange="loadCategories()"><option value="">All games</option></select></div><div id="categoriesTable" class="table-wrap"></div></div>
+    </section>
+
+    <section id="section-products" class="section">
+      <div class="panel"><div class="panel-head"><h2>Products</h2><button class="btn primary" onclick="openProductModal()">+ Add Product</button></div><div class="toolbar"><input id="productSearch" placeholder="Search products…" oninput="renderProducts()"><select id="productGameFilter"><option value="">All games</option></select><select id="productCategoryFilter"><option value="">All categories</option></select><select id="productStatusFilter"><option value="">All statuses</option><option value="active">Active</option><option value="inactive">Inactive</option></select><button class="btn ghost" type="button" onclick="loadProducts()">Refresh</button></div><div id="productsTable" class="table-wrap"></div></div>
+    </section>
+
+    <section id="section-inventory" class="section">
+      <div class="panel inventory-panel">
+        <div class="panel-head inventory-header">
+          <div>
+            <h2>Inventory</h2>
+            <p class="muted section-note">Manage delivery items, availability and stock.</p>
+          </div>
+          <button class="btn primary" onclick="openInventoryModal()">+ Add Inventory Items</button>
+        </div>
+
+        <div class="inventory-stats">
+          <div class="inventory-stat"><span>Total</span><strong id="inventoryTotalCount">0</strong></div>
+          <div class="inventory-stat"><span>Available</span><strong id="inventoryAvailableCount">0</strong></div>
+          <div class="inventory-stat"><span>Sold</span><strong id="inventorySoldCount">0</strong></div>
+        </div>
+
+        <div class="toolbar inventory-toolbar">
+          <input id="inventorySearch" placeholder="Search ID, product or item data…">
+          <select id="inventoryProductFilter">
+            <option value="">All products</option>
+          </select>
+          <select id="inventoryStatusFilter">
+            <option value="">All statuses</option>
+            <option value="available">Available</option>
+            <option value="sold">Sold</option>
+          </select>
+          <button class="btn ghost" type="button" onclick="loadInventory()">Refresh</button>
+        </div>
+
+        <div class="inventory-bulkbar">
+          <label class="select-all-label">
+            <input id="inventorySelectAll" type="checkbox">
+            <span>Select visible</span>
+          </label>
+          <span id="inventorySelectedCount" class="selected-count">0 selected</span>
+          <button id="inventoryBulkDeleteBtn" class="btn danger tiny" type="button" disabled>
+            Delete Selected
+          </button>
+        </div>
+
+        <div id="inventoryTable" class="table-wrap"></div>
+      </div>
+    </section>
+
+    <section id="section-orders" class="section"><div class="panel"><div class="panel-head"><h2>Orders</h2><button class="btn ghost" onclick="loadOrders()">Refresh</button></div><div class="toolbar"><input id="orderSearch" placeholder="Search order / Telegram ID / username…" oninput="renderOrders()"><select id="orderStatusFilter" onchange="loadOrders()"><option value="">All statuses</option><option value="pending">Pending</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select></div><div id="ordersTable" class="table-wrap"></div></div></section>
+    <section id="section-test-order" class="section">
+      <div class="panel">
+        <div class="panel-head"><div><h2>🧪 Test Store</h2><p class="muted">Create a real order for the configured admin account without charging Telegram Stars.</p></div></div>
+        <div class="test-order-card">
+          <label>Product<select id="testOrderProduct"></select></label>
+          <label>Quantity<input id="testOrderQuantity" type="number" min="1" value="1"></label>
+          <label class="check"><input id="testOrderComplete" type="checkbox" checked> Complete test and deliver inventory to Admin</label>
+          <p class="form-hint">When enabled, inventory is consumed, the order becomes Paid, a delivery record is created, and the delivery data is sent privately to the admin Telegram account.</p>
+          <button id="createTestOrderBtn" class="btn primary" type="button">🧪 Create Test Order</button>
+          <div id="testOrderMessage" class="form-message"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-referral" class="section">
+      <div class="panel">
+        <div class="panel-head"><div><h2>🎁 Referral Settings</h2><p class="muted">Control how much discount a referrer earns from each eligible referral.</p></div></div>
+        <div class="referral-settings-grid">
+          <label>Discount per referral (%)<input id="refPerUser" type="number" min="0" max="100" value="1"></label>
+          <label>Maximum discount (%)<input id="refMaxDiscount" type="number" min="0" max="100" value="70"></label>
+          <label>Discount duration (days)<input id="refDays" type="number" min="0" max="3650" value="7"></label>
+        </div>
+        <div class="settings-preview"><strong id="referralPreview">1% per referral • up to 70% • active for 7 days</strong><span>These settings are used by the checkout calculation.</span></div>
+        <button id="saveReferralSettingsBtn" class="btn primary" type="button">Save Referral Settings</button>
+        <div id="referralSettingsMessage" class="form-message"></div>
+      </div>
+    </section>
+<section id="section-order-details" class="section" style="display:none"></section>
+
+    <section id="section-payments" class="section"><div class="panel"><div class="panel-head"><h2>Payments</h2><button class="btn ghost" onclick="loadPayments()">Refresh</button></div><div class="toolbar"><input id="paymentSearch" placeholder="Search charge ID / username…" oninput="renderPayments()"></div><div id="paymentsTable" class="table-wrap"></div></div></section>
+
+    <section id="section-users" class="section"><div class="panel"><div class="panel-head"><h2>Users</h2><button class="btn ghost" onclick="loadUsers()">Refresh</button></div><div class="toolbar"><input id="userSearch" placeholder="Search Telegram ID, username, name…" oninput="renderUsers()"></div><div id="usersTable" class="table-wrap"></div></div></section>
+  </main>
+</div>
+
+<div id="modalBackdrop" class="modal-backdrop" onclick="backdropClose(event)"></div>
+<div id="gameModal" class="modal"><form id="gameForm" class="modal-card"><div class="modal-head"><h2 id="gameModalTitle">Add Game</h2><button type="button" class="icon-btn" onclick="closeModal('gameModal')">×</button></div><input id="gameId" type="hidden"><label>Name<input id="gameName" required></label><label>Description<textarea id="gameDescription"></textarea></label><label>Image URL / Telegram media<input id="gameImage" placeholder="https://... or /media/telegram/FILE_ID"></label><label class="check"><input id="gameActive" type="checkbox" checked> Active</label><label>Sort order<input id="gameSort" type="number" value="0"></label><div class="modal-actions"><button type="button" class="btn ghost" onclick="closeModal('gameModal')">Cancel</button><button class="btn primary">Save</button></div><div id="gameMessage" class="form-message"></div></form></div>
+
+<div id="categoryModal" class="modal"><form id="categoryForm" class="modal-card"><div class="modal-head"><h2 id="categoryModalTitle">Add Category</h2><button type="button" class="icon-btn" onclick="closeModal('categoryModal')">×</button></div><input id="categoryId" type="hidden"><label>Game<select id="categoryGame" required></select></label><label>Name<input id="categoryName" required></label><label>Description<textarea id="categoryDescription"></textarea></label><label>Image URL / Telegram media<input id="categoryImage" placeholder="https://... or /media/telegram/FILE_ID"></label><label class="check"><input id="categoryActive" type="checkbox" checked> Active</label><label>Sort order<input id="categorySort" type="number" value="0"></label><div class="modal-actions"><button type="button" class="btn ghost" onclick="closeModal('categoryModal')">Cancel</button><button class="btn primary">Save</button></div><div id="categoryMessage" class="form-message"></div></form></div>
+
+<div id="productModal" class="modal"><form id="productForm" class="modal-card wide"><div class="modal-head"><h2 id="productModalTitle">Add Product</h2><button type="button" class="icon-btn" onclick="closeModal('productModal')">×</button></div><input id="productId" type="hidden"><div id="productBaseFields"><div class="form-grid"><label>Name<input id="productName" required></label><label>Price (Stars)<input id="productPrice" type="number" min="1" required></label><label>Game<select id="productGame" required></select></label><label>Category<select id="productCategory" required></select></label><label>Stock<input id="productStock" type="number" min="0" value="0" required></label><label>Discount %<input id="productDiscount" type="number" min="0" max="100" value="0"></label><label class="check"><input id="productFeatured" type="checkbox"> Featured</label><label class="check"><input id="productActive" type="checkbox" checked> Active</label></div><label>Description<textarea id="productDescription"></textarea></label><label>Banner URL / Telegram media<input id="productBanner" type="text" inputmode="url" autocomplete="off" placeholder="https://… or /media/telegram/FILE_ID"></label><label>Product Images <span class="muted">(up to 100)</span><textarea id="productImages" rows="7" placeholder="https://example.com/image-1.jpg
+https://example.com/image-2.jpg"></textarea></label><label>Upload images from device<input id="productImageFiles" type="file" accept="image/*" multiple onchange="uploadProductImages(event)"></label><p id="productUploadMessage" class="form-hint">You can paste image URLs or upload images from your phone/computer. Uploaded images are stored through Telegram and linked to this product.</p><p class="form-hint">Stock is controlled by inventory. After the product is created, add the delivery items in the next step.</p></div><div id="productBasicActions" class="modal-actions"><button type="button" class="btn ghost" onclick="closeModal('productModal')">Cancel</button><button id="productSubmitText" class="btn primary">Create Product</button></div></div><div id="productInventoryStep" class="product-inventory-step" hidden><div class="product-inventory-head"><div class="product-inventory-icon">🧰</div><div><h3>Add Inventory</h3><p>This product stays unavailable to customers until at least one available inventory item exists. One delivery item goes on each line.</p></div></div><div class="product-inventory-product"><div><strong id="productInventoryProductName">New product</strong><span id="productInventoryProductId">Product #—</span></div><span id="productInventoryStock">0 available</span></div><label>Inventory items<textarea id="productInventoryData" class="product-inventory-textarea" rows="8" placeholder="1a:username@example.com:password
+password continuation:line 2
+2a:another@example.com:password:with:colons"></textarea></label><div class="inventory-input-meta"><span>Account mode: 1a:, 2a:, 3a: markers preserve multi-line passwords and ':' characters. Legacy one-item-per-line text is also supported.</span><strong id="productInventoryInputCount">0 items</strong></div><div id="productInventoryMessage" class="form-message"></div><p class="product-inventory-warning">The product will appear in the Store automatically after inventory is added and the product is Active.</p><div class="product-inventory-foot"><span id="productInventoryStatus" class="product-inventory-status">No inventory added yet.</span><div class="product-inventory-actions"><button id="productInventoryAddBtn" type="button" class="btn primary">Preview Inventory</button><button id="productInventoryFinishBtn" type="button" class="btn ghost">Finish</button></div></div></div><div id="productMessage" class="form-message"></div></form></div>
+
+<div id="productDetailsModal" class="modal"><div class="modal-card wide"><div class="modal-head"><h2>Product Details</h2><button type="button" class="icon-btn" onclick="closeModal('productDetailsModal')">×</button></div><div id="productDetailsContent" class="product-details"></div><div class="modal-actions"><button id="productDetailsSyncBtn" type="button" class="btn ghost">Sync Stock</button><button id="productDetailsEditBtn" type="button" class="btn primary">Edit Product</button><button type="button" class="btn ghost" onclick="closeModal('productDetailsModal')">Close</button></div></div></div>
+
+<div id="inventoryModal" class="modal"><form id="inventoryForm" class="modal-card wide"><div class="modal-head"><h2>Add Inventory Items</h2><button type="button" class="icon-btn" onclick="closeModal('inventoryModal')">×</button></div><label>Product<select id="inventoryProduct" required></select></label><label>Item Data<textarea id="inventoryItemData" rows="10" required placeholder="1a:username@example.com:password
+password continuation:line 2
+2a:another@example.com:password:with:colons"></textarea></label><div class="inventory-input-meta"><span>Account mode: 1a:, 2a:, 3a: markers preserve multi-line passwords and ':' characters. Legacy one-item-per-line text is also supported.</span><strong id="inventoryInputCount">0 items</strong></div><p class="form-hint inventory-hint">Up to 500 unique items can be added at once. Available stock is synchronized automatically.</p><div class="modal-actions"><button type="button" class="btn ghost" onclick="closeModal('inventoryModal')">Cancel</button><button class="btn primary">Preview Inventory</button></div><div id="inventoryMessage" class="form-message"></div></form></div>
+<script src="/static/admin/upgraded_admin.js?v=21" defer></script>
+<div id="orderDetailsModal" class="modal" style="display:none"><div class="modal-card modal-wide"><div class="modal-head"><h3>Order Details</h3><button class="btn ghost" onclick="closeModal('orderDetailsModal')">Close</button></div><div id="orderDetailsContent" class="modal-body"></div></div></div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>YOUR SHOP • Support Tickets</title>
+  <link rel="stylesheet" href="/static/shop/style.css?v=3">
+  <style>
+    :root{color-scheme:dark}
+    *{box-sizing:border-box}
+    body{margin:0;background:#070d18;color:#e8eef8;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .tickets-page{max-width:1180px;margin:0 auto;padding:20px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;padding:18px 20px;border:1px solid #1d2a40;border-radius:18px;background:#0d1524}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#36e6a0;color:#061017;font-weight:900}
+    .eyebrow{font-size:12px;color:#7f91aa;margin-bottom:3px}
+    h1{font-size:24px;margin:0}
+    .top-actions{display:flex;gap:9px;flex-wrap:wrap}
+    .btn{border:1px solid #263650;background:#121d30;color:#e8eef8;padding:10px 14px;border-radius:11px;cursor:pointer;font-weight:700}
+    .btn:hover{background:#18263c}
+    .btn.primary{background:#36e6a0;color:#061017;border-color:#36e6a0}
+    .layout{display:grid;grid-template-columns:380px 1fr;gap:16px;min-height:620px}
+    .panel{border:1px solid #1d2a40;border-radius:18px;background:#0d1524;overflow:hidden}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid #1d2a40;flex-wrap:wrap}
+    .panel-head h2{font-size:16px;margin:0}
+    .muted{color:#8291a8;font-size:13px}
+    #ticketList{padding:10px}
+    .ticket-card{width:100%;display:block;text-align:left;padding:15px;margin:0 0 8px;border:1px solid #1c2a40;border-radius:14px;background:#101a2c;color:#e8eef8;cursor:pointer}
+    .ticket-card:hover,.ticket-card.active{border-color:#36e6a0;background:#132238}
+    .ticket-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .ticket-subject{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#1d2a40;color:#b8c7da;white-space:nowrap}
+    .badge.open{color:#7ee7ff}.badge.in_progress{color:#ffd37a}.badge.resolved{color:#72efb2}.badge.closed{color:#9ca8ba}
+    .ticket-meta{margin-top:8px;font-size:12px;color:#8291a8}
+    .ticket-preview{margin-top:8px;color:#b8c4d5;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .detail-empty{height:100%;min-height:580px;display:grid;place-items:center;text-align:center;padding:30px;color:#7f91aa}
+    .empty-icon{font-size:38px;margin-bottom:10px}
+    #ticketDetail{padding:18px}
+    .detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:16px;border-bottom:1px solid #1d2a40}
+    .detail-title{margin:5px 0 4px;font-size:21px}
+    .customer{font-size:13px;color:#8291a8}
+    .status-select{background:#101a2c;color:#e8eef8;border:1px solid #2a3b55;border-radius:10px;padding:10px}
+    .messages{padding:16px 0;display:flex;flex-direction:column;gap:10px;max-height:410px;overflow:auto}
+    .message{max-width:88%;padding:12px 14px;border-radius:14px;border:1px solid #1d2a40;background:#101a2c}
+    .message.support{align-self:flex-end;background:#103025;border-color:#1d5a47}
+    .message-author{font-size:11px;font-weight:800;color:#8ea0b7;margin-bottom:6px}
+    .message-body{white-space:pre-wrap;line-height:1.5;font-size:14px}
+    .message-time{font-size:10px;color:#6f8098;margin-top:7px}
+    .reply-box{border-top:1px solid #1d2a40;padding-top:15px}
+    textarea{width:100%;min-height:105px;resize:vertical;background:#0a1220;color:#e8eef8;border:1px solid #263650;border-radius:12px;padding:12px;font:inherit;outline:none}
+    textarea:focus{border-color:#36e6a0}
+    .reply-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:9px}
+    .notice{padding:14px;color:#f0a8a8}
+    @media(max-width:850px){
+      .layout{grid-template-columns:1fr}
+      .panel{min-height:auto}
+      .messages{max-height:none}
+      .topbar{align-items:flex-start;flex-direction:column}
+      .top-actions{width:100%}
+      .top-actions .btn{flex:1}
+    }
+  .ticket-toolbar{display:flex;align-items:center;gap:8px;flex:1;min-width:280px}.ticket-search{width:min(360px,100%);background:#0a1220;color:#e8eef8;border:1px solid #263650;border-radius:10px;padding:9px 11px;outline:none}.ticket-status-filter{background:#101a2c;color:#e8eef8;border:1px solid #2a3b55;border-radius:10px;padding:9px 11px}.ticket-pagination{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 2px 2px;color:#8291a8;font-size:12px}.ticket-pagination .btn:disabled{opacity:.45;cursor:not-allowed}.ticket-tags,.ticket-detail-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.tag{font-size:10px;padding:4px 7px;border-radius:999px;background:#17243a;color:#9fb0c7}.priority-urgent{color:#fca5a5;background:#321820}.priority-high{color:#fcd34d;background:#302719}.ticket-detail-tags{margin-top:9px}
+</style>
+</head>
+<body>
+  <main class="tickets-page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">CPM</div>
+        <div>
+          <div class="eyebrow">YOUR SHOP • ADMIN PANEL</div>
+          <h1>Support Tickets</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="backAdmin" class="btn">← Admin Panel</button>
+        <button id="refresh" class="btn primary">↻ Refresh</button>
+      </div>
+    </header>
+
+    <section class="layout">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Customer Tickets</h2>
+          <span id="ticketCount" class="muted">0 tickets</span>
+        </div>
+        <div id="ticketList"></div>
+      </div>
+
+      <div class="panel">
+        <div id="ticketDetail" class="detail-empty">
+          <div>
+            <div class="empty-icon">🎫</div>
+            <strong>Select a ticket</strong>
+            <p class="muted">Choose a customer ticket from the list to view messages and reply.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/admin/tickets.js?v=4"></script>
+</body>
+</html>

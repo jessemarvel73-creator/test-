@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YOUR SHOP Admin</title>
+<link rel="stylesheet" href="/static/admin/admin.css">
+</head>
+<body class="auth-page">
+<div class="auth-card">
+  <div class="brand-mark">CPM</div>
+  <h1>YOUR SHOP</h1>
+  <p class="muted">Administrator access</p>
+  <form id="loginForm">
+    <label for="adminKey">Admin Key</label>
+    <input id="adminKey" name="adminKey" type="password" autocomplete="current-password" required placeholder="Enter admin key">
+    <button class="btn primary" type="submit">Sign in</button>
+    <div id="loginMessage" class="form-message"></div>
+  </form>
+</div>
+<script>
+(async function redirectExistingAdminSession() {
+  try {
+    const check = await fetch('/api/admin/me', {
+      method: 'GET',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    });
+    if (check.ok) {
+      const data = await check.json().catch(() => ({}));
+      if (data && data.authenticated === true) {
+        window.location.replace('/admin/panel');
+        return;
+      }
+    }
+  } catch (_) {
+    // Stay on the login form when the auth check cannot reach the server.
+  }
+})();
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const message = document.getElementById('loginMessage');
+  message.textContent = 'Signing in...';
+  try {
+    const r = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      credentials: 'same-origin',
+      body: JSON.stringify({admin_key: document.getElementById('adminKey').value})
+    });
+    const data = await r.json();
+    if (!r.ok || !data.ok) throw new Error(data.error || 'Login failed');
+    window.location.href = '/admin/panel';
+  } catch (err) {
+    message.textContent = '❌ ' + err.message;
+  }
+});
+</script>
+</body>
+</html>
