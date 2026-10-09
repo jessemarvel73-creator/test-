@@ -1,0 +1,102 @@
+name: Shop Keep Alive
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: shop-keepalive
+  cancel-in-progress: false
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Validate target
+        env:
+          SHOP_HEALTH_URL: ${{ vars.SHOP_HEALTH_URL }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${SHOP_HEALTH_URL}" ]]; then
+            echo "Missing GitHub repository variable: SHOP_HEALTH_URL"
+            exit 1
+          fi
+          echo "Target: ${SHOP_HEALTH_URL}"
+
+      - name: Wake and verify service
+        env:
+          SHOP_HEALTH_URL: ${{ vars.SHOP_HEALTH_URL }}
+        shell: bash
+        run: |
+          set -u
+
+          check_health() {
+            local attempt="$1"
+            local body_file
+            local http_code
+            local curl_status
+
+            body_file="$(mktemp)"
+
+            echo "========================================"
+            echo "Health check attempt ${attempt}"
+            echo "URL: ${SHOP_HEALTH_URL}"
+            echo "Time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+            echo "========================================"
+
+            set +e
+            http_code="$(curl \
+              --silent \
+              --show-error \
+              --location \
+              --connect-timeout 15 \
+              --max-time 75 \
+              --retry 4 \
+              --retry-delay 5 \
+              --retry-all-errors \
+              --header 'Cache-Control: no-cache' \
+              --header 'Pragma: no-cache' \
+              --header 'User-Agent: Shop-KeepAlive/2.1' \
+              --output "${body_file}" \
+              --write-out '%{http_code}' \
+              "${SHOP_HEALTH_URL}")"
+            curl_status=$?
+            set -e
+
+            echo "curl_exit=${curl_status}"
+            echo "http_status=${http_code:-000}"
+            echo "response_body:"
+            cat "${body_file}" || true
+            echo
+            rm -f "${body_file}"
+
+            if [[ "${curl_status}" -ne 0 ]]; then
+              return "${curl_status}"
+            fi
+
+            case "${http_code}" in
+              2*|3*) return 0 ;;
+              *) return 1 ;;
+            esac
+          }
+
+          # First request wakes a sleeping Render Free service.
+          if ! check_health 1; then
+            echo "First health check failed; retrying from a fresh request."
+          fi
+
+          sleep 5
+
+          # Independent verification after wake-up.
+          if ! check_health 2; then
+            echo "Health verification failed."
+            exit 1
+          fi
+
+          echo "Keep Alive completed successfully."
