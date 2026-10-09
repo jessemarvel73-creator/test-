@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: your-shop
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_ID
+        sync: false
+      - key: ADMIN_KEY
+        sync: false
+      - key: WEBAPP_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: SHOP_NAME
+        value: YOUR SHOP
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: SUPPORT_USERNAME
+        sync: false
+      - key: TELEGRAM_WEBHOOK_SECRET
+        sync: false
+      - key: PORT
+        value: "10000"
+      - key: DEBUG
+        value: "0"

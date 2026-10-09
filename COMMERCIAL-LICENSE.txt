@@ -1,0 +1,18 @@
+COMMERCIAL LICENSE — TEMPLATE NOTICE
+
+This package is provided for commercial deployment/use under the terms agreed
+between the copyright holder/seller and each purchaser.
+
+Unless the purchase agreement explicitly says otherwise:
+
+1. One paid purchase is intended for one independent shop deployment.
+2. The purchaser may configure and modify the code for that deployment.
+3. Redistribution of the source as a competing template/service is not
+   permitted without written permission from the copyright holder.
+4. Telegram, Render, PostgreSQL, and other third-party services remain subject
+   to their own terms and pricing.
+5. The purchaser is responsible for keeping bot tokens, database credentials,
+   admin keys, and other secrets private.
+
+This file is a template notice and is not legal advice. Replace it with a
+lawyer-reviewed agreement before using it as a formal commercial license.
